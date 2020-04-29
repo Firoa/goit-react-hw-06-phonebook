@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import ContactForm from '../ContactForm/ContactForm';
 import ContactList from '../ContactList/ContactList';
@@ -10,12 +12,6 @@ import slide from '../ContactList/slide.module.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      contacts: [],
-      filter: '',
-      allert: { flag: false, name: null },
-    };
-
     this.formId = uuidv4();
   }
 
@@ -34,49 +30,27 @@ class App extends Component {
     }
   }
 
-  handleAddContact = data => {
-    const flag = this.state.contacts.find(({ name }) => name === data.name);
-    if (flag !== undefined) {
-      return { flag: true, name: flag.name };
-    }
-    this.setState(prevState => {
-      return {
-        contacts: [...prevState.contacts, data],
-      };
-    });
-    return { flag: false };
-  };
-
-  handleDeleteContact = key => {
-    const newState = this.state.contacts.filter(({ id }) => id !== key);
-    this.setState({ contacts: newState });
-  };
-
-  handleFilter = data => {
-    this.setState({ filter: data });
-  };
-
   render() {
-    const { contacts, filter } = this.state;
+    const { contacts } = this.props;
+    console.log(contacts)
     return (
       <div className={styles.app}>
-        <ContactForm onAddSubmit={this.handleAddContact} />
+        <ContactForm />
         <CSSTransition
           in={!!(contacts.length > 1)}
           timeout={250}
           classNames={slide}
           unmountOnExit
         >
-          <Filter onChange={this.handleFilter} />
+          <Filter />
         </CSSTransition>
-        <ContactList
-          listData={contacts}
-          filterKey={filter}
-          callbackfunc={this.handleDeleteContact}
-        />
+       {contacts.length > 0 && <ContactList />}
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  contacts: state.contacts, 
+});
+export default connect(mapStateToProps)(App);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../redux/actions'
+import * as actions from '../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '../Button/Button';
 import styles from './ContactForm.module.css';
@@ -30,10 +30,11 @@ class ContactForm extends Component {
     this.setState({ [name]: value });
   };
 
-  handleAddContact = e => {
-    e.preventDefault();
-    const flag = this.props.onAddSubmit({ ...this.state, ...{ id: uuidv4() } });
-    this.setState({ allert: flag });
+  handleAddContact = () => {
+    const { contacts } = this.props;
+    const {name} = this.state;
+    if (contacts.find(contact => contact.name === name))
+      this.setState({ allert: {flag:true,name:name} });
     setTimeout(() => {
       this.setState(prevState => {
         return {
@@ -53,7 +54,7 @@ class ContactForm extends Component {
 
   render() {
     const { name, number, startFlag, allert } = this.state;
-    const {OnAddContact} = this.props;    
+    const { OnAddContact } = this.props;
     return (
       <div>
         <form
@@ -96,25 +97,28 @@ class ContactForm extends Component {
               className={styles.FormInput}
             ></input>
           </label>
-          <Button type="submit" text="Add contact" />
-        <button
-        onClick= {()=>OnAddContact({ ...this.state, ...{ id: uuidv4() } })}        
-        type='button'
-      >
-      TEST
-      </button>
+          <Button
+            type="button"
+            text="Add contact"
+            callbackfunc={() => {
+              OnAddContact({ ...this.state, ...{ id: uuidv4() } });
+              this.handleAddContact();
+            }}
+            test={this.resetState}
+          />
         </form>
       </div>
     );
   }
 }
-const mapStateToProps = state => ({ // send a props to compoent
-  value:state,
-  test:"ALISGOOD"
+const mapStateToProps = state => ({
+  // send a props to compoent
+  contacts: state.contacts,
+  test: 'ALISGOOD',
 });
 
-const mapDispatchToProps = (dispatch) =>({
-  OnAddContact: (data)=> dispatch(actions.addContact(data))
-})
+const mapDispatchToProps = dispatch => ({
+  OnAddContact: data => dispatch(actions.addContact(data)),
+});
 
-export default connect(mapStateToProps,mapDispatchToProps)(ContactForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

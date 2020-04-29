@@ -2,12 +2,11 @@ import React from 'react';
 import styles from './Button.module.css';
 import PropTypes from 'prop-types';
 
-const Button = ({ callbackfunc, text, type }) => {
-  const key = text.toLowerCase();
+const Button = ({ callbackfunc, text, type}) => {  
   if (typeof callbackfunc === 'function') {
     return (
       <button
-        onClick={() => callbackfunc(key)}
+        onClick={callbackfunc}       
         className={styles.button}
         type={type}
       >

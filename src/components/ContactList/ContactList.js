@@ -1,15 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../redux/actions'
+import * as actions from '../../redux/actions';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import styles from './ContactList.module.css';
 import slide from './slide.module.css';
 
-const ContactList = ({ listData, filterKey, callbackfunc, OnDeleteContact}) => {
-  if (listData === undefined) return;
-  let renderList = [...listData];
+const ContactList = ({ filterKey, OnDeleteContact, contacts }) => {
+  let renderList = [...contacts];
   if (filterKey !== '') {
-    renderList = listData.filter(({ name }) =>
+    renderList = contacts.filter(({ name }) =>
       name.toLowerCase().includes(filterKey.toLowerCase()),
     );
   }
@@ -28,17 +27,10 @@ const ContactList = ({ listData, filterKey, callbackfunc, OnDeleteContact}) => {
               <p className={styles.ItemInfo}>{number}</p>
               <button
                 className={styles.button}
-                onClick={() => callbackfunc(id)}
-                type="button"
-              >
-                Delete
-              </button>
-              <button
-                className={styles.button}
                 onClick={() => OnDeleteContact(id)}
                 type="button"
               >
-                DeleteREDUX
+                Delete
               </button>
             </li>
           </CSSTransition>
@@ -48,14 +40,14 @@ const ContactList = ({ listData, filterKey, callbackfunc, OnDeleteContact}) => {
   );
 };
 
-const mapStateToProps = state => ({ // send a props to compoent
-  value:state,
-  test:"ALISGOOD"
+const mapStateToProps = state => ({
+  // send a props to component
+  contacts: state.contacts,
+  filterKey: state.filter,
 });
 
-const mapDispatchToProps = (dispatch) =>({
-  OnDeleteContact: (data)=> dispatch(actions.deleteContact(data))
-})
+const mapDispatchToProps = dispatch => ({
+  OnDeleteContact: data => dispatch(actions.deleteContact(data)),
+});
 
-
-export default connect(mapStateToProps,mapDispatchToProps) (ContactList);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
