@@ -48,6 +48,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   OnDeleteContact: data => dispatch(actions.deleteContact(data)),
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactList);

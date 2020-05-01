@@ -22,8 +22,22 @@ class ContactForm extends Component {
     this.formId = uuidv4();
   }
 
-  componentDidMount() {
+  componentDidMount() {   
     this.setState({ startFlag: true });
+    const {readFromLS} =this.props;
+    const persistedContacts = localStorage.getItem('contacts');
+    if (!!persistedContacts) {
+      readFromLS(JSON.parse(persistedContacts))
+    }
+  }
+
+  componentDidUpdate (prevProps,prevState){
+    const {contacts,writeToLS} = this.props
+    if(prevProps !== this.props)
+    {
+      writeToLS(contacts);
+    }
+    
   }
   handleChange = e => {
     const { value, name } = e.target;
@@ -41,8 +55,8 @@ class ContactForm extends Component {
           allert: { ...prevState.allert, flag: false },
         };
       });
-    }, 1000);
-    this.resetState();
+    }, 1000);       
+    this.resetState();  
   };
 
   resetState = () => {
@@ -52,9 +66,9 @@ class ContactForm extends Component {
     });
   };
 
-  render() {
+  render() {   
     const { name, number, startFlag, allert } = this.state;
-    const { OnAddContact } = this.props;
+    const { OnAddContact} = this.props;   
     return (
       <div>
         <form
@@ -119,6 +133,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   OnAddContact: data => dispatch(actions.addContact(data)),
+  writeToLS: data => dispatch(actions.writeToLS(data)),
+  readFromLS: data => dispatch(actions.readFromLS(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

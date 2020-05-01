@@ -13,3 +13,13 @@ export const onChangeFilter = (data)=>({
     type: Type.CHANGEFILTER,
     payload: data,
 })
+
+export const writeToLS = (data)=>({
+    type: Type.WRITETOLOCALSTORE,
+    payload:data,
+})
+
+export const readFromLS = (data)=>({
+    type: Type.READFROMLOCALSTORE,
+    payload: data
+})
