@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import * as actions from '../../redux/actions';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import styles from './ContactList.module.css';
 import slide from './slide.module.css';
+import PropTypes from 'prop-types';
 
 const ContactList = ({ filterKey, OnDeleteContact, contacts }) => {
   let renderList = [...contacts];
@@ -40,15 +39,10 @@ const ContactList = ({ filterKey, OnDeleteContact, contacts }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  // send a props to component
-  contacts: state.contacts,
-  filterKey: state.filter,
-});
+ContactList.propTypes = {
+  filterKey: PropTypes.string.isRequired,
+  OnDeleteContact: PropTypes.func,  
+  contacts: PropTypes.array
+};
 
-const mapDispatchToProps = dispatch => ({
-  OnDeleteContact: data => dispatch(actions.deleteContact(data)),
-
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
+export default ContactList;

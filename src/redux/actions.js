@@ -1,25 +1,9 @@
-import  {Type}  from "./actionTypes";
+import { createAction } from "@reduxjs/toolkit";
 
-export const addContact = (data)=>({
-    type: Type.ADDCONTACT,
-    payload: data,
-})
-export const deleteContact = (data)=>({
-    type: Type.DELETECONTACT,
-    payload: data,
-})
+export const addContact = createAction('contacts/addContacts');
+export const deleteContact = createAction('contacts/deleteContact');
+export const onChangeFilter = createAction('contacts/onChangeFilter');
+export const writeToLS = createAction('contacts/writeToLS');  
+export const readFromLS = createAction('contacts/readFromLS');  
 
-export const onChangeFilter = (data)=>({
-    type: Type.CHANGEFILTER,
-    payload: data,
-})
 
-export const writeToLS = (data)=>({
-    type: Type.WRITETOLOCALSTORE,
-    payload:data,
-})
-
-export const readFromLS = (data)=>({
-    type: Type.READFROMLOCALSTORE,
-    payload: data
-})

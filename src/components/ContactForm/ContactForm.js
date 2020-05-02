@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import * as actions from '../../redux/actions';
+
 import { v4 as uuidv4 } from 'uuid';
 import Button from '../Button/Button';
 import styles from './ContactForm.module.css';
@@ -22,22 +21,20 @@ class ContactForm extends Component {
     this.formId = uuidv4();
   }
 
-  componentDidMount() {   
+  componentDidMount() {
     this.setState({ startFlag: true });
-    const {readFromLS} =this.props;
+    const { readFromLS } = this.props;
     const persistedContacts = localStorage.getItem('contacts');
     if (!!persistedContacts) {
-      readFromLS(JSON.parse(persistedContacts))
+      readFromLS(JSON.parse(persistedContacts));
     }
   }
 
-  componentDidUpdate (prevProps,prevState){
-    const {contacts,writeToLS} = this.props
-    if(prevProps !== this.props)
-    {
+  componentDidUpdate(prevProps, prevState) {
+    const { contacts, writeToLS } = this.props;
+    if (prevProps !== this.props) {
       writeToLS(contacts);
     }
-    
   }
   handleChange = e => {
     const { value, name } = e.target;
@@ -46,17 +43,17 @@ class ContactForm extends Component {
 
   handleAddContact = () => {
     const { contacts } = this.props;
-    const {name} = this.state;
+    const { name } = this.state;
     if (contacts.find(contact => contact.name === name))
-      this.setState({ allert: {flag:true,name:name} });
+      this.setState({ allert: { flag: true, name: name } });
     setTimeout(() => {
       this.setState(prevState => {
         return {
           allert: { ...prevState.allert, flag: false },
         };
       });
-    }, 1000);       
-    this.resetState();  
+    }, 1000);
+    this.resetState();
   };
 
   resetState = () => {
@@ -66,9 +63,9 @@ class ContactForm extends Component {
     });
   };
 
-  render() {   
+  render() {
     const { name, number, startFlag, allert } = this.state;
-    const { OnAddContact} = this.props;   
+    const { OnAddContact } = this.props;
     return (
       <div>
         <form
@@ -125,16 +122,5 @@ class ContactForm extends Component {
     );
   }
 }
-const mapStateToProps = state => ({
-  // send a props to compoent
-  contacts: state.contacts,
-  test: 'ALISGOOD',
-});
 
-const mapDispatchToProps = dispatch => ({
-  OnAddContact: data => dispatch(actions.addContact(data)),
-  writeToLS: data => dispatch(actions.writeToLS(data)),
-  readFromLS: data => dispatch(actions.readFromLS(data))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
+export default ContactForm;

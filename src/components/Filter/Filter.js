@@ -1,7 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import * as actions from '../../redux/actions';
 import styles from './Filter.module.css';
+import PropTypes from 'prop-types';
 
 const Filter = ({ onChangeFilter, filter }) => (
   <div>
@@ -12,7 +11,7 @@ const Filter = ({ onChangeFilter, filter }) => (
           type="text"
           placeholder="Enter contact"
           value={filter}
-          onChange={e => onChangeFilter(e.target.value)}        
+          onChange={e => onChangeFilter(e.target.value)}
           name="filter"
           className={styles.FormInput}
         ></input>
@@ -21,11 +20,9 @@ const Filter = ({ onChangeFilter, filter }) => (
   </div>
 );
 
-const mapStateToProps = state => ({
-  filter: state.filter,
-});
-const mapDispatchToProps = dispatch => ({
-  onChangeFilter: data => dispatch(actions.onChangeFilter(data)),
-});
+Filter.propTypes = {
+  filter: PropTypes.string.isRequired,
+  onChangeFilter: PropTypes.func,  
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
+export default Filter;

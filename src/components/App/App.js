@@ -1,11 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import ContactForm from '../ContactForm/ContactForm';
-import ContactList from '../ContactList/ContactList';
+import ContactForm from '../../containers/ContactFormContainer';
+import ContactList from '../../containers/ContactListContainer';
 import styles from './App.module.css';
-import Filter from '../Filter/Filter';
+import Filter from '../../containers/FilterContainer';
 import { CSSTransition } from 'react-transition-group';
 import slide from '../ContactList/slide.module.css';
+import PropTypes from 'prop-types';
 
 const App = ({ contacts }) => (
   <div className={styles.app}>
@@ -22,7 +22,8 @@ const App = ({ contacts }) => (
   </div>
 );
 
-const mapStateToProps = state => ({
-  contacts: state.contacts,
-});
-export default connect(mapStateToProps, null)(App);
+ContactList.propTypes = {
+  contacts: PropTypes.array,
+};
+
+export default App;
